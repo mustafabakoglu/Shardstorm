@@ -34,30 +34,41 @@ SS.generateTextures = function (scene) {
   }
 
   // ==========================================================================
-  // HERO — armored forge golem: dark plate ring, cyan energy core, visor eyes
+  // HERO — stone golem: bulky rocky shoulders, glowing orange magic runes
   // ==========================================================================
   bake('hero', 52, 52, (g) => {
-    // outer armor ring (faceted)
-    g.fillStyle(0x16283f); poly(g, 26, 26, 24, 8, Math.PI / 8);
-    g.fillStyle(0x24405f); poly(g, 26, 26, 21, 8, Math.PI / 8);
-    // plate seams
-    g.lineStyle(2, 0x0e1a2c, 1);
-    for (let i = 0; i < 8; i++) {
-      const a = Math.PI / 8 + (i / 8) * Math.PI * 2;
-      g.lineBetween(26 + Math.cos(a) * 12, 26 + Math.sin(a) * 12, 26 + Math.cos(a) * 21, 26 + Math.sin(a) * 21);
-    }
-    // energy core
-    g.fillStyle(0x1d6f96); g.fillCircle(26, 26, 13);
-    g.fillStyle(0x36c7f0); g.fillCircle(26, 26, 10);
-    g.fillStyle(0xaef2ff); g.fillCircle(26, 26, 6);
-    // visor eyes
-    g.fillStyle(0x06121f);
-    g.fillRoundedRect(17, 20, 8, 5, 2); g.fillRoundedRect(27, 20, 8, 5, 2);
-    g.fillStyle(0xd8fbff);
-    g.fillRoundedRect(19, 21, 4, 3, 1.5); g.fillRoundedRect(29, 21, 4, 3, 1.5);
+    // Rocky body
+    g.fillStyle(0x4a4341); // dark grey/brown
+    poly(g, 26, 26, 24, 6, Math.PI / 6);
+    
+    // Shoulders
+    g.fillStyle(0x5c5451);
+    g.fillCircle(14, 26, 12);
+    g.fillCircle(38, 26, 12);
+    
+    // Head/Chest block
+    g.fillStyle(0x6e6561);
+    g.fillRoundedRect(18, 14, 16, 22, 4);
+    
+    // Glowing orange runes/cracks
+    g.lineStyle(2, 0xff9c3f, 1);
+    g.beginPath();
+    g.moveTo(22, 18); g.lineTo(26, 24); g.lineTo(30, 18);
+    g.moveTo(26, 24); g.lineTo(26, 32);
+    g.strokePath();
+
+    // Angry glowing eyes
+    g.fillStyle(0xffffff);
+    g.fillTriangle(20, 20, 25, 21, 21, 23);
+    g.fillTriangle(32, 20, 27, 21, 31, 23);
+    
+    // Inner eye glow
+    g.fillStyle(0xffe94d);
+    g.fillCircle(22, 21, 1.5);
+    g.fillCircle(30, 21, 1.5);
   });
   bake('hero_core', 40, 40, (g) => {      // pulsing glow layered under the hero
-    for (let i = 7; i > 0; i--) { g.fillStyle(0x4de1ff, 0.06 * (8 - i) / 3); g.fillCircle(20, 20, i * 2.8); }
+    for (let i = 7; i > 0; i--) { g.fillStyle(0xff9c3f, 0.08 * (8 - i) / 3); g.fillCircle(20, 20, i * 2.8); }
   });
 
   // ==========================================================================
@@ -251,9 +262,9 @@ SS.generateTextures = function (scene) {
     }
   });
   bake('shieldfx', 72, 72, (g) => {       // shield bubble around the hero
-    g.lineStyle(3, 0x4de1ff, 0.9); g.strokeCircle(36, 36, 32);
-    g.fillStyle(0x4de1ff, 0.10); g.fillCircle(36, 36, 32);
-    g.lineStyle(1.5, 0xaef2ff, 0.6); g.strokeCircle(36, 36, 27);
+    g.lineStyle(3, 0xff9c3f, 0.9); g.strokeCircle(36, 36, 32);
+    g.fillStyle(0xff9c3f, 0.10); g.fillCircle(36, 36, 32);
+    g.lineStyle(1.5, 0xffd34d, 0.6); g.strokeCircle(36, 36, 27);
   });
 
   bake('pet', 26, 26, (g) => {

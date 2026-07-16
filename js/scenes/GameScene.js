@@ -115,6 +115,16 @@ class GameScene extends Phaser.Scene {
     this.cameras.main.setBounds(0, 0, WORLD, WORLD);
     this.cameras.main.setBackgroundColor(SS.COLORS.bg);
 
+    // Dynamic aesthetic background colors
+    this.skyColors = [
+      Phaser.Display.Color.IntegerToColor(0x0a0e1a), // Deep Navy
+      Phaser.Display.Color.IntegerToColor(0x1a0b2e), // Purple
+      Phaser.Display.Color.IntegerToColor(0x360d3d), // Deep Magenta
+      Phaser.Display.Color.IntegerToColor(0x521330), // Crimson Neon
+      Phaser.Display.Color.IntegerToColor(0x6b1f14), // Orange Red Sunset
+      Phaser.Display.Color.IntegerToColor(0x4a2a0c)  // Chill Orange
+    ];
+
     // Soft grid backdrop, drawn once into a single Graphics (cheap)
     const g = this.add.graphics().setDepth(-10);
     g.lineStyle(1, SS.COLORS.grid, 1);
@@ -252,6 +262,14 @@ class GameScene extends Phaser.Scene {
     this.updatePickups(dt);
     this.updatePet(dt);
 
+    // Dynamic weather / background color shift (Aesthetic Chill Neon Orange cycle)
+    const cycle = (this.runTime / 45) % this.skyColors.length; // shift every 45s
+    const idx1 = Math.floor(cycle);
+    const idx2 = (idx1 + 1) % this.skyColors.length;
+    const t = cycle - idx1;
+    const interp = Phaser.Display.Color.Interpolate.ColorWithColor(this.skyColors[idx1], this.skyColors[idx2], 100, t * 100);
+    this.cameras.main.setBackgroundColor(Phaser.Display.Color.GetColor(interp.r, interp.g, interp.b));
+
     // combo decay
     if (this.combo > 0) {
       this.comboTimer -= delta;
@@ -291,7 +309,7 @@ class GameScene extends Phaser.Scene {
     // brief burst then normal control resumes naturally next frame's movePlayer
     this.tweens.add({ targets: this.player, alpha: 0.4, duration: 90, yoyo: true, repeat: 1 });
     SS.Audio.play('dash');
-    this.burst(this.player.x, this.player.y, 0x4de1ff, 10, 3);
+    this.burst(this.player.x, this.player.y, 0xff9c3f, 10, 3);
     // Comet Dash: dashing detonates a shockwave
     if (this.stats.dashDmg > 0) {
       const dmg = 30 * this.stats.dmgMult * this.stats.dashDmg;
@@ -300,7 +318,7 @@ class GameScene extends Phaser.Scene {
     // ghost trail
     for (let i = 0; i < 3; i++) {
       const gh = this.add.image(this.player.x - d.x * i * 20, this.player.y - d.y * i * 20, 'hero')
-        .setAlpha(0.3 - i * 0.08).setDepth(8).setTint(0x4de1ff);
+        .setAlpha(0.3 - i * 0.08).setDepth(8).setTint(0xff9c3f);
       this.tweens.add({ targets: gh, alpha: 0, duration: 250, onComplete: () => gh.destroy() });
     }
     this.ui.setDashCd(this.stats.dashCd);
